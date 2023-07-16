@@ -1,0 +1,17 @@
+.formContainer{
+    display: flex;
+    border: 1px solid red;
+    height: 500px;
+    
+}
+form{
+    display: flex;
+flex-direction: column;
+justify-content: center;
+align-content: center;
+    margin: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+    border: 1px solid green;
+}
