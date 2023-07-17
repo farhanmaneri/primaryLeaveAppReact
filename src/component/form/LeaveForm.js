@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./LeaveForm.css";
 import database from "../../config/firebase";
 function LeaveForm() {
   // form state
   const [formData, setFormData] = useState({
+    gender: "Ms.",
     name: "",
-    Gender: "Ms.",
     desgination: "PST",
     schoolName: "",
     schoolStatus: "GGPS",
@@ -16,7 +16,8 @@ function LeaveForm() {
     tehsil: "",
     serviceBook: "Yes",
   });
-
+  
+  
   // handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,6 +25,9 @@ function LeaveForm() {
     console.log(formData);
     Push()
   };
+  
+  const [dataArray, setDataArray]= useState([]);
+  const { name, gender, desgination, schoolName, schoolStatus, leaveFrom, leaveUpto, leaveType, leaveNature, tehsil, serviceBook } = formData;
 
   // handle form input changes
   const handleChange = (e) => {
@@ -32,9 +36,10 @@ function LeaveForm() {
   };
   const Push = () => {
     let x = Math.floor(Math.random()*10000);
-    database.ref("/").child(`user/${x}`).set({
+    const newData ={
+      id: x,
+      gender: formData.gender,
       name: formData.name,
-      Gender: formData.Gender,
       desgination: formData.desgination,
       schoolName:formData.schoolName,
       schoolStatus: formData.schoolStatus,
@@ -44,10 +49,33 @@ function LeaveForm() {
       leaveNature: formData.leaveNature,
       tehsil: formData.tehsil,
       serviceBook: formData.serviceBook,
+    };
+    setDataArray((preDataArray)=>[...preDataArray, newData]);
+    database.ref("/").child(`user/${x}`).set({
+      newData
+      
     }).catch(alert);
-        }
+        };
+
+        useEffect(()=>{
+          const fetchData = async ()=>{
+            const snapshot = await database.ref('/user').once('value');
+            const fetchedData = snapshot.val();
+            if(fetchedData){
+              const dataArray = Object.entries(fetchedData).map(([key,value])=>({
+                id: key,
+                ...value.newData
+              }));
+              setDataArray(dataArray)
+              // console.log(dataArray)
+            }
+            
+          }
+          fetchData();
+        },[]);
 
   return (
+    <>
     <div className="formContainer">
       <form onSubmit={handleSubmit}>
         <div>
@@ -55,8 +83,8 @@ function LeaveForm() {
             Gender:
             <select
               type="select"
-              name="Gender"
-              value={formData.Gender}
+              name="gender"
+              value={formData.gender}
               onChange={handleChange}
             >
               <option value="Mr.">Mr.</option>
@@ -213,6 +241,31 @@ function LeaveForm() {
         </div>
       </form>
     </div>
+    <div>
+        <h3>Data Table:</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Gender</th>
+              <th>Name</th>
+              <th>Designation</th>
+              {/* Add more table headers for other fields */}
+            </tr>
+          </thead>
+          <tbody>
+            {dataArray.map((v,i) => (
+              <tr key={i}>
+                <td>{v.gender}</td>
+                <td>{v.name}</td>
+                <td>{v.desgination}</td>
+                {/* Add more table cells for other fields */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+  </>
+    
   );
 }
 
