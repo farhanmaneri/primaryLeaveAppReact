@@ -9,8 +9,8 @@ function Home() {
     <>
     <div>
 
-     {/* <LeaveForm/> */}
-     <FireStore/>
+     <LeaveForm/>
+     {/* <FireStore/> */}
 
     </div>
      <div>

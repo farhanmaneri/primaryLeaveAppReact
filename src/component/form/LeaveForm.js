@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./LeaveForm.css";
+import database from "../../config/firebase";
 function LeaveForm() {
   // form state
   const [formData, setFormData] = useState({
@@ -10,10 +11,10 @@ function LeaveForm() {
     schoolStatus: "GGPS",
     leaveFrom: "",
     leaveUpto: "",
-    leaveType: "",
-    leaveNature: "",
+    leaveType: "With full Pay",
+    leaveNature: "Earned Leave",
     tehsil: "",
-    serviceBook: "",
+    serviceBook: "Yes",
   });
 
   // handle form submission
@@ -21,12 +22,30 @@ function LeaveForm() {
     e.preventDefault();
     // perform any necessary form submission logic
     console.log(formData);
+    Push()
   };
 
   // handle form input changes
   const handleChange = (e) => {
+    // setFormData({[e.target.name]: e.target.value})
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const Push = () => {
+    let x = Math.floor(Math.random()*10000);
+    database.ref("/").child(`user/${x}`).set({
+      name: formData.name,
+      Gender: formData.Gender,
+      desgination: formData.desgination,
+      schoolName:formData.schoolName,
+      schoolStatus: formData.schoolStatus,
+      leaveFrom: formData.leaveFrom,
+      leaveUpto: formData.leaveUpto,
+      leaveType: formData.leaveType,
+      leaveNature: formData.leaveNature,
+      tehsil: formData.tehsil,
+      serviceBook: formData.serviceBook,
+    }).catch(alert);
+        }
 
   return (
     <div className="formContainer">
