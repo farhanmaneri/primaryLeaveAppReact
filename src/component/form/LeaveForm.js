@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./LeaveForm.css";
 import database from "../../config/firebase";
+import DataTable from "../dataTable/DataTable";
 function LeaveForm() {
   // form state
   const [formData, setFormData] = useState({
@@ -11,10 +12,11 @@ function LeaveForm() {
     schoolStatus: "GGPS",
     leaveFrom: "",
     leaveUpto: "",
-    leaveType: "With full Pay",
+    leaveType: "On full Pay",
     leaveNature: "Earned Leave",
-    tehsil: "",
+    tehsil: "Swabi",
     serviceBook: "Yes",
+    days:"",
   });
   
   
@@ -23,7 +25,21 @@ function LeaveForm() {
     e.preventDefault();
     // perform any necessary form submission logic
     console.log(formData);
-    Push()
+    Push();
+    setFormData({
+      name: '',
+      gender: '',
+      desgination: '',
+      schoolName: '',
+      schoolStatus: '',
+      leaveFrom: '',
+      leaveUpto: '',
+      leaveType: '',
+      leaveNature: '',
+      tehsil: '',
+      serviceBook: '',
+    });
+    
   };
   
   const [dataArray, setDataArray]= useState([]);
@@ -34,6 +50,12 @@ function LeaveForm() {
     // setFormData({[e.target.name]: e.target.value})
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  
+    const fromDate = new Date(leaveFrom);
+    const toDate = new Date(leaveUpto);
+    const timeDifference = toDate.getTime() - fromDate.getTime();
+    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+  
   const Push = () => {
     let x = Math.floor(Math.random()*10000);
     const newData ={
@@ -49,6 +71,7 @@ function LeaveForm() {
       leaveNature: formData.leaveNature,
       tehsil: formData.tehsil,
       serviceBook: formData.serviceBook,
+      days:daysDifference,
     };
     setDataArray((preDataArray)=>[...preDataArray, newData]);
     database.ref("/").child(`user/${x}`).set({
@@ -64,9 +87,10 @@ function LeaveForm() {
             if(fetchedData){
               const dataArray = Object.entries(fetchedData).map(([key,value])=>({
                 id: key,
-                ...value.newData
+                ...value.newData,
               }));
               setDataArray(dataArray)
+              
               // console.log(dataArray)
             }
             
@@ -76,6 +100,7 @@ function LeaveForm() {
 
   return (
     <>
+    {/* <button onClick={handleCalculateDays}>date</button> */}
     <div className="formContainer">
       <form onSubmit={handleSubmit}>
         <div>
@@ -242,6 +267,11 @@ function LeaveForm() {
       </form>
     </div>
     <div>
+      <DataTable dataArray={dataArray} />
+    </div>
+    
+      {/* Rest of the component code */}
+    {/* <div>
         <h3>Data Table:</h3>
         <table>
           <thead>
@@ -249,7 +279,6 @@ function LeaveForm() {
               <th>Gender</th>
               <th>Name</th>
               <th>Designation</th>
-              {/* Add more table headers for other fields */}
             </tr>
           </thead>
           <tbody>
@@ -258,12 +287,11 @@ function LeaveForm() {
                 <td>{v.gender}</td>
                 <td>{v.name}</td>
                 <td>{v.desgination}</td>
-                {/* Add more table cells for other fields */}
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </div> */}
   </>
     
   );
