@@ -1,17 +1,56 @@
 .formContainer{
     display: flex;
+    justify-content: center;
     border: 1px solid red;
     height: 500px;
     
 }
 form{
-    display: flex;
-flex-direction: column;
+    /* display: flex; */
+/* flex-direction: column; */
 justify-content: center;
 align-content: center;
     margin: 20px;
     padding: 20px;
     flex-wrap: wrap;
-    width: 100%;
+    /* width: 100%; */
     border: 1px solid green;
+    font-weight: bold;
+}
+input{
+    height: 25px;
+    padding: 5px;
+    margin: 10px;
+    background: rgb(255, 252, 252);
+    border-radius: 10px;
+    font-weight: bold;
+    &:focus{ background: rgb(220, 186, 186);}
+
+}
+select, option{
+    height: 40px;
+    padding: 5px;
+    margin: 15px;
+    background: rgb(247, 245, 245);
+    border: 2px solid black;
+    border-radius: 10px;
+    font-weight: bold;
+    &:focus{ background: rgb(220, 186, 186);};
+
+}
+.inputSections{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.submitBtn{
+    height: 40px;
+    background: rgb(178, 255, 178);
+    border-radius: 10px;
+    font-size: large;
+    font-weight: bold;
+    margin-top: 30px;
+    &:focus{ background: rgb(220, 186, 186);}
+
 }
