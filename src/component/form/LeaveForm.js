@@ -3,11 +3,12 @@ import "./LeaveForm.css";
 import database from "../../config/firebase";
 import DataTable from "../dataTable/DataTable";
 function LeaveForm() {
+  
   // form state
   const [formData, setFormData] = useState({
     gender: "Ms.",
     name: "",
-    desgination: "PST",
+    designation: "PST",
     schoolName: "",
     schoolStatus: "GGPS",
     leaveFrom: "",
@@ -19,16 +20,38 @@ function LeaveForm() {
     days: "",
   });
 
+  const [cadre, setCadre] = useState('primary'); // Default to 'primary'
+
   // handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     // perform any necessary form submission logic
-    console.log(formData);
-    Push();
+    // console.log(formData);
+     // Determine the path based on the selected cadre
+     const newData = {
+      gender: formData.gender,
+      name: formData.name,
+      desgination: formData.designation,
+      schoolName: formData.schoolName,
+      schoolStatus: formData.schoolStatus,
+      leaveFrom: formData.leaveFrom,
+      leaveUpto: formData.leaveUpto,
+      leaveType: formData.leaveType,
+      leaveNature: formData.leaveNature,
+      tehsil: formData.tehsil,
+      serviceBook: formData.serviceBook,
+      days: daysDifference || 0,   // it no date were enter it will give zero
+    };
+     const path = `/teachers/${cadre}`;
+
+     // Push the teacher data to the database under the determined path
+     database.ref(path).push(newData);
+    //  setCadre('primary')
+
     setFormData({
       name: "",
       gender: "",
-      desgination: "",
+      designation: "",
       schoolName: "",
       schoolStatus: "",
       leaveFrom: "",
@@ -37,20 +60,13 @@ function LeaveForm() {
       leaveNature: "",
       tehsil: "",
       serviceBook: "",
-      day: 0,
+      days: 0,
     });
   };
-
-  const [dataArray, setDataArray] = useState([]);
-  const {
-    name,
-    gender,
-    desgination,
-    schoolName,
-    schoolStatus,
-    leaveFrom,
-    leaveUpto,
-    leaveType,
+const [primaryTeachers, setPrimaryTeachers] = useState([]);
+const [secondaryTeachers, setSecondaryTeachers] = useState([]);
+  // const [dataArray, setDataArray] = useState([]);
+  const { name,    gender,    desgination,    schoolName,  schoolStatus,    leaveFrom,    leaveUpto,    leaveType,
     leaveNature,
     tehsil,
     serviceBook,
@@ -68,106 +84,195 @@ function LeaveForm() {
   const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
   //..................... date formate change from yy.mm.dd to dd.mm.yy..............
 
-  // const formattedFromDate = fromDate.toLocaleDateString();
-  //  console.log(formattedFromDate)
-  // const formattedToDate = toDate.toLocaleDateString('');
-  //  console.log(formattedToDate)
+ 
 
-  // const handleDelete = (index) => {
-  //   // Implement the delete logic here using the index as the key
-  //   // For example, you can remove the item from the dataArray based on the index and update the database
-  //   const newDataArray = [...dataArray];
-  //   newDataArray.splice(index, 1);
-  //   setDataArray(newDataArray);
+  // const pushPrimaryTeacher = () => {
+  //       const newData = {
+  //     gender: formData.gender,
+  //     name: formData.name,
+  //     desgination: formData.desgination,
+  //     schoolName: formData.schoolName,
+  //     schoolStatus: formData.schoolStatus,
+  //     leaveFrom: formData.leaveFrom,
+  //     leaveUpto: formData.leaveUpto,
+  //     leaveType: formData.leaveType,
+  //     leaveNature: formData.leaveNature,
+  //     tehsil: formData.tehsil,
+  //     serviceBook: formData.serviceBook,
+  //     days: daysDifference || 0,   // it no date were enter it will give zero
+  //   };
+  //   const newDatabaseRef = database.ref("/teachers/primary").push(); // Generates a new unique key
+  //   const newId = newDatabaseRef.key; // Get the unique key
 
-  //   // Update the database here if needed
+  //   newDatabaseRef
+  //     .set(newData)
+  //     .then(() => {
+  //       // Add the generated unique key to the newData object
+  //       newData.id = newId;
+  //     })
+  //     .catch(alert);
   // };
-  const handleEdit = (index, updatedData) => {
-    // Implement the edit logic here using the index and updated data
-    // For example, you can update the item in the dataArray based on the index with the updatedData
-    const newDataArray = [...dataArray];
-    newDataArray[index] = updatedData;
-    setDataArray(newDataArray);
+//   const pushSecondaryTeacher = () => {
+//     const newData = {
+//   gender: formData.gender,
+//   name: formData.name,
+//   desgination: formData.desgination,
+//   schoolName: formData.schoolName,
+//   schoolStatus: formData.schoolStatus,
+//   leaveFrom: formData.leaveFrom,
+//   leaveUpto: formData.leaveUpto,
+//   leaveType: formData.leaveType,
+//   leaveNature: formData.leaveNature,
+//   tehsil: formData.tehsil,
+//   serviceBook: formData.serviceBook,
+//   days: daysDifference || 0,   // it no date were enter it will give zero
+// };
+// const newDatabaseRef = database.ref("/teachers/secondary").push(); // Generates a new unique key
+// const newId = newDatabaseRef.key; // Get the unique key
 
-    // Update the database here if needed
-  };
+// newDatabaseRef
+//   .set(newData)
+//   .then(() => {
+//     // Add the generated unique key to the newData object
+//     newData.id = newId;
+//   })
+//   .catch(alert);
+// };
 
-  const Push = () => {
-        const newData = {
-      gender: formData.gender,
-      name: formData.name,
-      desgination: formData.desgination,
-      schoolName: formData.schoolName,
-      schoolStatus: formData.schoolStatus,
-      leaveFrom: formData.leaveFrom,
-      leaveUpto: formData.leaveUpto,
-      leaveType: formData.leaveType,
-      leaveNature: formData.leaveNature,
-      tehsil: formData.tehsil,
-      serviceBook: formData.serviceBook,
-      days: daysDifference,
-    };
-    const newDatabaseRef = database.ref("/users").push(); // Generates a new unique key
-    const newId = newDatabaseRef.key; // Get the unique key
 
-    newDatabaseRef
-      .set(newData)
-      .then(() => {
-        // Add the generated unique key to the newData object
-        newData.id = newId;
-      })
-      .catch(alert);
-  };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPrimaryTeacher = async () => {
       try {
         // Attach an event listener to the 'value' event for the '/users' path
-        database.ref("/users").on("value", (snapshot) => {
+        database.ref("/teachers/primary").on("value", (snapshot) => {
           const fetchedData = snapshot.val();
           if (fetchedData) {
             const dataArray = Object.entries(fetchedData).map(
               ([id, value]) => ({
                 id,
+                cadre:'primary',
                 ...value,
               })
             );
 
-            setDataArray(dataArray);
+            setPrimaryTeachers(dataArray);
           }
+          
         });
+        
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
-    fetchData();
-
+    fetchPrimaryTeacher();
     // Clean up the event listener when the component unmounts to avoid memory leaks
     return () => {
-      database.ref("/users").off("value");
+      database.ref("/teachers/primary").off("value");
+      // database.ref("/teachers/primary").off("value");
     };
+    
   }, []);
 
-  const handleDelete = async ( id) => {
+  // fetching Secondary Teachers Data
+  useEffect(() => {
+    const fetchSecondaryTeacher = async () => {
+      try {
+        // Attach an event listener to the 'value' event for the '/users' path
+        database.ref("/teachers/secondary").on("value", (snapshot) => {
+          const fetchedData = snapshot.val();
+          if (fetchedData) {
+            const dataArray = Object.entries(fetchedData).map(
+              ([id, value]) => ({
+                id,
+                cadre: 'secondary',
+                ...value,
+              })
+            );
+            setSecondaryTeachers(dataArray);
+          }          
+        });        
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchSecondaryTeacher();
+    // Clean up the event listener when the component unmounts to avoid memory leaks
+    return () => {
+      database.ref("/teachers/Secondary").off("value");
+    };
+    
+  }, []);
+
+
+  const handleDelete = async (cadre,id) => {
     // console.log("id in form:", id)
+    // console.log("cadre in form:", cadre)
+    
     try {
+      // Construct the path based on the cadre and the teacher's ID
+      const path = `/teachers/${cadre}/${id}`;
+
       // Remove the data from the database
-      await database.ref(`/users/${id}`).remove();
+      await database.ref(path).remove();
 
       // Update the local state by removing the item from the dataArray
-      const newDataArray = dataArray.filter((data) => data.id !== id);
-      setDataArray(newDataArray);
+      if (cadre === 'primary') {
+        const newPrimaryTeachers = primaryTeachers.filter((teacher) => teacher.id !== id);
+        setPrimaryTeachers(newPrimaryTeachers);
+      } else if (cadre === 'secondary') {
+        const newSecondaryTeachers = secondaryTeachers.filter((teacher) => teacher.id !== id);
+        setSecondaryTeachers(newSecondaryTeachers);
+      }
     } catch (error) {
-      console.error("Error deleting data:", error);
+      console.error('Error deleting data:', error);
     }
+  };
+  const [showPrimary, setShowPrimary] = useState(true);
+  const handleToggleCadre = (e) => {
+    const selectedCadre = e.target.value;
+    setCadre(selectedCadre)
+    setShowPrimary((prevShowPrimary) => !prevShowPrimary);
+    // console.log('working')
   };
 
   return (
     <>
-      {/* <button onClick={handleCalculateDays}>date</button> */}
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
+        <div className="inputSections">
+          <div>
+          <label>
+          Cadre:
+          <select className="upperSection" value={cadre}  onChange={handleToggleCadre}>
+            <option value="primary">Primary</option>
+            <option value="secondary">Secondary</option>
+          </select>
+        </label>
+          </div>
+          <div>
+            <label >
+              Nature of Leave:
+              <select
+              className="upperSection"
+                type="select"
+                name="leaveNature"
+                value={formData.leaveNature}
+                onChange={handleChange}
+                >
+                <option value="Maternity (Pre-Natal)">
+                  Maternity (Pre-Natal)
+                </option>
+                <option value="Maternity (Post-Natal)">
+                  Maternity (Post-Natal)
+                </option>
+                <option value="Earned Leave">Earned Leave</option>
+              </select>
+            </label>
+          </div>
+          </div>
+          <hr></hr>
+
           <div className="inputSections">
             <div>
               <label>
@@ -201,7 +306,7 @@ function LeaveForm() {
                 <select
                   type="select"
                   name="desgination"
-                  value={formData.desgination}
+                  value={formData.designation}
                   onChange={handleChange}
                 >
                   <option value="PST">PST</option>
@@ -263,25 +368,7 @@ function LeaveForm() {
               </label>
             </div>
 
-          <div>
-            <label>
-              Nature of Leave:
-              <select
-                type="select"
-                name="leaveNature"
-                value={formData.leaveNature}
-                onChange={handleChange}
-                >
-                <option value="Maternity (Pre-Natal)">
-                  Maternity (Pre-Natal)
-                </option>
-                <option value="Maternity (Post-Natal)">
-                  Maternity (Post-Natal)
-                </option>
-                <option value="Earned Leave">Earned Leave</option>
-              </select>
-            </label>
-          </div>
+         
                 </div>
           <div className="inputSections">
 
@@ -331,6 +418,9 @@ function LeaveForm() {
                 <option value="No">No</option>
               </select>
             </label>
+           
+      </div>
+      <div>
           </div>
                 </div>
           <div>
@@ -340,9 +430,11 @@ function LeaveForm() {
       </div>
       <div>
         <DataTable
-          dataArray={dataArray}
-          handleEdit={handleEdit}
+          primaryTeachers={primaryTeachers}
+          // handleEdit={handleEdit}
           handleDelete={handleDelete}
+          showPrimary={showPrimary}
+          secondaryTeachers={secondaryTeachers}
         />
       </div>
 

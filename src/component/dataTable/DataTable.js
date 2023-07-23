@@ -2,7 +2,8 @@ import React from "react";
 import "./DataTable.css";
 import { useState } from "react";
 
-function DataTable({ dataArray, handleDelete, handleEdit }) {
+function DataTable({ primaryTeachers,secondaryTeachers, handleDelete, handleEdit, showPrimary }) {
+
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedData, setEditedData] = useState({
     gender: "Ms.",
@@ -20,15 +21,17 @@ function DataTable({ dataArray, handleDelete, handleEdit }) {
     // Add other fields here
   });
 
-  const handleEditClick = (index) => {
-    console.log(index);
-    const selectedData = dataArray[index];
-    setEditedData({ ...selectedData });
-    setEditingIndex(index);
-  };
+  
 
-  const handleDeleteClick = (id) => {
-    handleDelete(id);
+  // const handleEditClick = (index) => {
+  //   console.log(index);
+  //   const selectedData = dataArray[index];
+  //   setEditedData({ ...selectedData });
+  //   setEditingIndex(index);
+  // };
+
+  const handleDeleteClick = (cadre,id) => {
+    handleDelete(cadre, id);
   };
   
 
@@ -43,9 +46,15 @@ function DataTable({ dataArray, handleDelete, handleEdit }) {
     window.print();
   };
   return (
+    <>
+    
+    {/* <button onClick={handleToggleCadre}>
+      Show {showPrimary ? 'Secondary' : 'Primary'} Teachers
+    </button> */}
     <div className="tableContainer">
       <h3>Data Table:</h3>
-      <table>
+      {showPrimary ?(
+        <table>
         <thead>
           <tr>
             <th>S.No</th>
@@ -62,7 +71,7 @@ function DataTable({ dataArray, handleDelete, handleEdit }) {
           </tr>
         </thead>
         <tbody>
-          {dataArray.map((data, index) => (
+          {primaryTeachers.map((data, index) => (
             <tr key={data.id}>
               <td>{index + 1}</td>
               <td>
@@ -72,7 +81,7 @@ function DataTable({ dataArray, handleDelete, handleEdit }) {
                 {data.schoolStatus} {data.schoolName}
               </td>
               <td>
-                {data.leaveFrom} To {data.leaveUpto} days ({data.days}) {data.leaveType}
+                {data.leaveFrom} To {data.leaveUpto} days ({data.days}) days {data.leaveType}
               </td>
               <td>{data.leaveNature}</td>
               <td>{data.tehsil}</td>
@@ -87,8 +96,8 @@ function DataTable({ dataArray, handleDelete, handleEdit }) {
                   </>
                 ) : (
                   <>
-                    <button onClick={() => handleEditClick(index)}>Edit</button>
-                    <button onClick={() => handleDeleteClick(data.id)}>Delete</button>
+                    {/* <button onClick={() => handleEditClick(index)}>Edit</button> */}
+                    <button onClick={() => handleDeleteClick(data.cadre, data.id )}>Delete</button>
 
                   </>
                 )}
@@ -98,11 +107,70 @@ function DataTable({ dataArray, handleDelete, handleEdit }) {
           ))}
         </tbody>
       </table>
+        
+      ):(
+        <table>
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Name</th>
+            <th>School/Station</th>
+            <th>Leave Date</th>
+            <th>Nature of Leave</th>
+            <th>Tehsil</th>
+            <th>
+              S/Book <br></br> Attached
+            </th>
+            
+            {/* Add more table headers for other fields */}
+          </tr>
+        </thead>
+        <tbody>
+          {secondaryTeachers.map((data, index) => (
+            <tr key={data.id}>
+              <td>{index + 1}</td>
+              <td>
+                {data.gender} {data.name} {data.desgination}
+              </td>
+              <td>
+                {data.schoolStatus} {data.schoolName}
+              </td>
+              <td>
+                {data.leaveFrom} To {data.leaveUpto} days ({data.days}) days {data.leaveType}
+              </td>
+              <td>{data.leaveNature}</td>
+              <td>{data.tehsil}</td>
+              <td>{data.serviceBook} </td>
+
+              <td>
+                {/* Edit and Delete buttons */}
+                {editingIndex === index ? (
+                  <>
+                    <button onClick={() => handleSaveEdit()}>Save</button>
+                    <button onClick={() => setEditingIndex(-1)}>Cancel</button>
+                  </>
+                ) : (
+                  <>
+                    {/* <button onClick={() => handleEditClick(index)}>Edit</button> */}
+                    <button onClick={() => handleDeleteClick(data.cadre, data.id)}>Delete</button>
+
+                  </>
+                )}
+              </td>
+              {/* Add more table cells for other fields */}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      )
+    }
+      
       <button className="print_button" onClick={handlePrint}>
         Print
       </button>
     </div>
-  );
+    </>  
+    );
 }
 
 export default DataTable;

@@ -54,3 +54,6 @@ select, option{
     &:focus{ background: rgb(220, 186, 186);}
 
 }
+.upperSection{
+    background-color: rgb(255, 0, 0);
+}
