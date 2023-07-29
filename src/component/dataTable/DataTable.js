@@ -2,7 +2,7 @@ import React from "react";
 import "./DataTable.css";
 import { useState } from "react";
 
-function DataTable({ primaryTeachers,secondaryTeachers, handleDelete, handleEdit, showPrimary }) {
+function DataTable({ primaryTeachers,secondaryTeachers, date, handleDelete, handleEdit, showPrimary }) {
 
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedData, setEditedData] = useState({
@@ -30,8 +30,8 @@ function DataTable({ primaryTeachers,secondaryTeachers, handleDelete, handleEdit
   //   setEditingIndex(index);
   // };
 
-  const handleDeleteClick = (cadre,id) => {
-    handleDelete(cadre, id);
+  const handleDeleteClick = (cadre, date,id ) => {
+    handleDelete(cadre, date,id);
   };
   
 
@@ -53,6 +53,7 @@ function DataTable({ primaryTeachers,secondaryTeachers, handleDelete, handleEdit
     </button> */}
     <div className="tableContainer">
       <h3>Data Table:</h3>
+      {date}
       {showPrimary ?(
         <table>
         <thead>
@@ -97,7 +98,7 @@ function DataTable({ primaryTeachers,secondaryTeachers, handleDelete, handleEdit
                 ) : (
                   <>
                     {/* <button onClick={() => handleEditClick(index)}>Edit</button> */}
-                    <button onClick={() => handleDeleteClick(data.cadre, data.id )}>Delete</button>
+                    <button onClick={() => handleDeleteClick(data.cadre,data.date, data.id )}>Delete</button>
 
                   </>
                 )}
@@ -152,7 +153,7 @@ function DataTable({ primaryTeachers,secondaryTeachers, handleDelete, handleEdit
                 ) : (
                   <>
                     {/* <button onClick={() => handleEditClick(index)}>Edit</button> */}
-                    <button onClick={() => handleDeleteClick(data.cadre, data.id)}>Delete</button>
+                    <button onClick={() => handleDeleteClick(data.cadre, data.date,data.id )}>Delete</button>
 
                   </>
                 )}
