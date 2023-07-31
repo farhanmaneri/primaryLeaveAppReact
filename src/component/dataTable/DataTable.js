@@ -75,13 +75,13 @@ function DataTable({ primaryTeachers,secondaryTeachers, date, handleDelete, hand
           {primaryTeachers.map((data, index) => (
             <tr key={data.id}>
               <td>{index + 1}</td>
-              <td>
+              <td className="capitalize-text">
                 {data.gender} {data.name} {data.desgination}
               </td>
-              <td>
+              <td className="capitalize-text">
                 {data.schoolStatus} {data.schoolName}
               </td>
-              <td>
+              <td className="capitalize-text">
                 {data.leaveFrom} To {data.leaveUpto} days ({data.days}) days {data.leaveType}
               </td>
               <td>{data.leaveNature}</td>

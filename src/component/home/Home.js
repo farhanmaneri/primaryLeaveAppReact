@@ -1,8 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
 import LeaveForm from '../form/LeaveForm'
-import FireStore from '../FireStore'
-import Puc from '../puc/Puc'
+// import FireStore from '../FireStore'
+// import Puc from '../puc/Puc'
 
 function Home() {
     const navigate = useNavigate();
@@ -24,4 +24,4 @@ function Home() {
   )
 }
 
-export default Home
+export default Home;
