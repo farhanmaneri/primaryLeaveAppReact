@@ -70,6 +70,8 @@ function LeaveForm() {
   };
   const [primaryTeachers, setPrimaryTeachers] = useState([]);
   const [secondaryTeachers, setSecondaryTeachers] = useState([]);
+  // const [selectedLeaveType, setSelectedLeaveType] = useState(''); // Initialize with an empty string as the default value
+
   // const [dataArray, setDataArray] = useState([]);
   const {
     name,
@@ -287,7 +289,7 @@ function LeaveForm() {
                 Desgination:
                 <select
                   type="select"
-                  name="desgination"
+                  name="designation"
                   value={formData.designation}
                   onChange={handleChange}
                 >
@@ -433,7 +435,7 @@ function LeaveForm() {
               <tr key={i}>
                 <td>{v.gender}</td>
                 <td>{v.name}</td>
-                <td>{v.desgination}</td>
+                <td>{vig}</td>
               </tr>
             ))}
           </tbody>

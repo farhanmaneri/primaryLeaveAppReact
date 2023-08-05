@@ -1,3 +1,4 @@
+import LeaveForm from '../component/form/LeaveForm';
 import Home from '../component/home/Home';
 import Puc from '../component/puc/Puc';
 import { Counter } from '../features/counter/counter'
@@ -7,6 +8,7 @@ const Routes = ()=>{
     return(
        <AppRoutes>
         <Route path='/' element={<Home/>} ></Route>
+        <Route path='/leaveform' element={<LeaveForm/>} ></Route>
         <Route path='/counter' element={<Counter/>} ></Route>
         <Route path='/puc' element={<Puc/>} ></Route>
        </AppRoutes> 
